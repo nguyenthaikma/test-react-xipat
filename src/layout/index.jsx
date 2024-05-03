@@ -6,6 +6,7 @@ import {
 import { Layout, Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { ROUTE_PATH } from "../route/const";
 
 const { Content, Sider } = Layout;
 
@@ -14,24 +15,24 @@ export default function LayoutApp({ children }) {
     {
       icon: DashboardOutlined,
       label: "Dashboard",
-      route: "/",
+      route: ROUTE_PATH.DASHBOARD_SUBCRIPTION,
     },
     {
       icon: ReadOutlined,
       label: "Post Management",
-      route: "/posts",
+      route: ROUTE_PATH.POST,
     },
     {
       icon: SettingOutlined,
       label: "Setting",
-      route: "/setting",
+      route: ROUTE_PATH.SETTING,
     },
   ];
 
   const items = menuItems.map((menuItems, index) => {
     const key = String(index + 1);
     return {
-      key: `item-${key}`,
+      key,
       icon: React.createElement(menuItems.icon),
       label: <Link to={menuItems.route}>{menuItems.label}</Link>,
     };
@@ -39,41 +40,16 @@ export default function LayoutApp({ children }) {
   return (
     <Layout className="app-container">
       <Layout>
-        <Sider
-          width={200}
-          style={{
-            background: "#fafafa",
-          }}
-        >
+        <Sider width={200} className="layout-sider">
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            style={{
-              height: "100%",
-              borderRight: 0,
-              background: "#fafafa",
-            }}
+            className="menu"
             items={items}
           />
         </Sider>
-        <Layout
-          style={{
-            padding: "0 24px 24px",
-            background: "#fff",
-          }}
-        >
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: "#fff",
-              borderRadius: 20,
-            }}
-          >
-            {children}
-          </Content>
+        <Layout className="layout-content">
+          <Content className="children">{children}</Content>
         </Layout>
       </Layout>
     </Layout>

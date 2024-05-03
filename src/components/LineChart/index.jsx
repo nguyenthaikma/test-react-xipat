@@ -1,7 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
-export default function Home() {
+function LineChart() {
   const configChart = {
     series: [
       {
@@ -34,14 +34,10 @@ export default function Home() {
         size: 6,
         showNullDataPoints: false,
       },
-      title: {
-        text: "Product Trends by Month",
-        align: "left",
-      },
       colors: ["#4096ff", "#545454"],
       grid: {
         row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          colors: ["#f3f3f3", "transparent"],
           opacity: 0.5,
         },
         padding: {
@@ -75,3 +71,5 @@ export default function Home() {
     />
   );
 }
+
+export default React.memo(LineChart);

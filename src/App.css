@@ -1,3 +1,27 @@
+.lazy-loading-app {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .ant-layout {
   height: 100%;
+}
+.ant-layout .layout-sider {
+  background: #fafafa;
+}
+.ant-layout .layout-sider .menu {
+  border-right: 0;
+  background: #fafafa;
+}
+.layout-content {
+  padding: 0 24px 24px;
+  background: #fff;
+}
+.layout-content .children {
+  padding: 24px 0;
+  min-height: 280;
+  background: #fff;
+  border-radius: 20;
 }
