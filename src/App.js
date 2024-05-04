@@ -1,8 +1,10 @@
 import { ConfigProvider } from "antd";
+import { QueryClient, QueryClientProvider } from "react-query";
 import "./App.css";
 import RouteApp from "./route";
 
 function App() {
+  const queryClient = new QueryClient();
   return (
     <ConfigProvider
       theme={{
@@ -11,7 +13,9 @@ function App() {
         },
       }}
     >
-      <RouteApp />
+      <QueryClientProvider client={queryClient}>
+        <RouteApp />
+      </QueryClientProvider>
     </ConfigProvider>
   );
 }
