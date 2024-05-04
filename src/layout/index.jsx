@@ -4,13 +4,19 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ROUTE_PATH } from "../route/const";
 
 const { Content, Sider } = Layout;
 
 export default function LayoutApp({ children }) {
+  // Set document Title
+  const [documentTitle, setDocumentTitle] = useState("Dashboard");
+  useEffect(() => {
+    document.title = documentTitle;
+  }, [documentTitle]);
+
   const menuItems = [
     {
       icon: DashboardOutlined,
@@ -34,7 +40,7 @@ export default function LayoutApp({ children }) {
     return {
       key,
       icon: React.createElement(menuItems.icon),
-      label: <Link to={menuItems.route}>{menuItems.label}</Link>,
+      label: <Link onClick={() => setDocumentTitle(menuItems.label)} to={menuItems.route}>{menuItems.label}</Link>,
     };
   });
   return (

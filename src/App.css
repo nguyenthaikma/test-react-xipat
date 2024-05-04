@@ -8,6 +8,12 @@
 .ant-layout {
   height: 100%;
 }
+.form-input .ant-input {
+  color: inherit;
+}
+.form-input .ant-input-wrapper {
+  color: inherit;
+}
 .ant-layout .layout-sider {
   background: #fafafa;
 }
@@ -21,7 +27,7 @@
 }
 .layout-content .children {
   padding: 24px 0;
-  min-height: 280;
+  min-height: 280px;
   background: #fff;
   border-radius: 20;
 }
