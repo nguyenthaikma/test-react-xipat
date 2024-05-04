@@ -14,6 +14,7 @@ const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 export default function Setting() {
+  // Define state
   const [textColor, setTextColor] = useState(false);
   const [isChangeValue, setIsChangeValue] = useState(false);
 

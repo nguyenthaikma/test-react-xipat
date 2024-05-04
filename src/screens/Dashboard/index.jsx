@@ -10,16 +10,30 @@ const { Title } = Typography;
 export default function Dashboard() {
   const path = useLocation();
   const navigate = useNavigate();
-
   const typeChart = path.pathname.split("/").pop();
-  const series = useMemo(
+
+  // Fake data chart
+  const seriesLineChart = useMemo(
     () => [
       {
-        name: "High - 2013",
+        name: "Data - 1",
+        data: [25, 29, 33, 30, 32, 32, 33],
+      },
+      {
+        name: "Data - 2",
+        data: [12, 11, 14, 18, 17, 13, 13],
+      },
+    ],
+    []
+  );
+  const seriesColumnChart = useMemo(
+    () => [
+      {
+        name: "Data - 1",
         data: [28, 29, 33, 36, 32, 32, 33, 29, 34, 28, 26, 25],
       },
       {
-        name: "Low - 2013",
+        name: "Data - 2",
         data: [12, 11, 14, 18, 17, 13, 13, 15, 12, 16, 14, 15],
       },
     ],
@@ -50,7 +64,11 @@ export default function Dashboard() {
         </Space>
       </Col>
       <Col span={24}>
-        {typeChart === "subcription" ? <LineChart series={series} /> : <ColumnChart series={series} />}
+        {typeChart === "subcription" ? (
+          <LineChart series={seriesLineChart} />
+        ) : (
+          <ColumnChart series={seriesColumnChart} />
+        )}
       </Col>
     </Row>
   );

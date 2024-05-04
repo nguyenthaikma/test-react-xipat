@@ -1,13 +1,9 @@
-import { ProfileOutlined } from "@ant-design/icons";
 import {
-  Button,
-  Col,
-  Input,
-  Row,
-  Spin,
-  Table,
-  Typography
-} from "antd";
+  ProfileOutlined,
+  FilterOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Button, Col, Input, Row, Space, Spin, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useQueryListPost } from "../../queries/post";
 import ModalDetail from "./components/ModalDetail";
@@ -15,9 +11,13 @@ import ModalDetail from "./components/ModalDetail";
 const { Title } = Typography;
 
 export default function Post() {
+  // Define state
   const [posts, setPosts] = useState([]);
   const [detailPost, setDetailPost] = useState(null);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [searchUserId, setSearchUserId] = useState("");
 
+  // Fetch data
   const {
     data: queryPost,
     isLoading: isLoadingListPost,
@@ -27,26 +27,41 @@ export default function Post() {
     setPosts(queryPost?.data || []);
   }, [queryPost]);
 
-  const onSearch = (v) => {
-    setPosts(posts.filter((post) => post.title.includes(v)));
+
+  // Filter
+  const onFilter = () => {
+    const dataPost = queryPost?.data || [];
+    setPosts(
+      dataPost.filter((post) => {
+        const titleMatch = !searchTitle
+          ? true
+          : post.title.includes(searchTitle);
+        const userIdMatch = !searchUserId
+          ? true
+          : post.userId === parseInt(searchUserId);
+
+        return titleMatch && userIdMatch;
+      })
+    );
+  };
+  const onClear = () => {
+    setSearchTitle("");
+    setSearchUserId("");
+    const dataPost = queryPost?.data || [];
+    setPosts(dataPost);
   };
 
+  // Table config
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
-      sorter: (a, b) => {
-        return a.id - b.id;
-      },
     },
     {
       title: "User ID",
       dataIndex: "userId",
       key: "userId",
-      sorter: (a, b) => {
-        return a.userId - b.userId;
-      },
     },
     {
       title: "Title",
@@ -76,17 +91,42 @@ export default function Post() {
         <Col span={24}>
           <Title level={5}>Post Managament</Title>
         </Col>
-        <Col span={6}>
-          <Input.Search
-            placeholder="Search by title"
-            allowClear
-            onSearch={onSearch}
-            onChange={(e) => {
-              if (e.type === "click") {
-                setPosts(queryPost?.data);
-              }
-            }}
-          />
+        <Col span={24}>
+          <Row gutter={[6, 0]}>
+            <Col span={6}>
+              <Input
+                placeholder="Title"
+                value={searchTitle}
+                onChange={(e) => {
+                  setSearchTitle(e.target.value);
+                }}
+              />
+            </Col>
+            <Col span={6}>
+              <Input
+                placeholder="User ID"
+                value={searchUserId}
+                onChange={(e) => {
+                  setSearchUserId(e.target.value);
+                }}
+              />
+            </Col>
+            <Col span={6}>
+              <Space size={4}>
+                <Button
+                  type="primary"
+                  icon={<FilterOutlined />}
+                  onClick={onFilter}
+                />
+                <Button
+                  type="primary"
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={onClear}
+                />
+              </Space>
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           {isLoadingListPost ? (
@@ -98,7 +138,7 @@ export default function Post() {
               className="table-custom"
               columns={columns}
               dataSource={posts}
-              rowKey="_id"
+              rowKey="id"
               pagination={{
                 total: posts?.length,
                 position: ["bottomLeft"],
