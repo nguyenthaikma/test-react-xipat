@@ -3,17 +3,14 @@
 body {
   margin: 0;
   font-family: "Roboto", sans-serif;
-
-  height: 100vh;
 }
-
 * {
   margin: 0;
 }
 
 #root {
-  height: 100%;
-  overflow: auto;
+  height: 100vh;
+  overflow: hidden;
 }
 .h-full {
   height: 100%;

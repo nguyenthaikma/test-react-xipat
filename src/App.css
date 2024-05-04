@@ -15,13 +15,17 @@
   color: inherit;
 }
 .ant-layout .layout-sider {
+  overflow: hidden;
   background: #fafafa;
+  height: 100vh;
 }
 .ant-layout .layout-sider .menu {
   border-right: 0;
   background: #fafafa;
 }
 .layout-content {
+  overflow-y: auto;
+  min-height: 100vh;
   padding: 0 24px 24px;
   background: #fff;
 }

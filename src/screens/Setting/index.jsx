@@ -21,7 +21,7 @@ export default function Setting() {
     setIsChangeValue(Object.keys(values).some((key) => values[key]));
   };
   const onFinish = (values) => {
-    console.log("🚀 ~ onFinish ~ Setting:", values);
+    console.log("🚀🚀🚀 ~ onFinish ~ Setting:", values);
   };
 
   return (
@@ -85,7 +85,6 @@ export default function Setting() {
                   placeholder="Enter background color"
                   addonAfter={
                     <ColorPicker
-                      format="hex"
                       onChange={(v) => {
                         setTextColor(v.toHexString());
                       }}

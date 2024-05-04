@@ -5,12 +5,15 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ROUTE_PATH } from "../route/const";
 
 const { Content, Sider } = Layout;
 
 export default function LayoutApp({ children }) {
+  const location = useLocation();
+  const { pathname } = location;
+
   // Set document Title
   const [documentTitle, setDocumentTitle] = useState("Dashboard");
   useEffect(() => {
@@ -35,12 +38,18 @@ export default function LayoutApp({ children }) {
     },
   ];
 
-  const items = menuItems.map((menuItems, index) => {
-    const key = String(index + 1);
+  const items = menuItems.map((menuItems) => {
     return {
-      key,
+      key: menuItems.route,
       icon: React.createElement(menuItems.icon),
-      label: <Link onClick={() => setDocumentTitle(menuItems.label)} to={menuItems.route}>{menuItems.label}</Link>,
+      label: (
+        <Link
+          onClick={() => setDocumentTitle(menuItems.label)}
+          to={menuItems.route}
+        >
+          {menuItems.label}
+        </Link>
+      ),
     };
   });
   return (
@@ -49,7 +58,7 @@ export default function LayoutApp({ children }) {
         <Sider width={200} className="layout-sider">
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={[pathname]}
             className="menu"
             items={items}
           />

@@ -2,16 +2,15 @@ import { ProfileOutlined } from "@ant-design/icons";
 import {
   Button,
   Col,
-  Descriptions,
   Input,
-  Modal,
   Row,
   Spin,
   Table,
-  Typography,
+  Typography
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useQueryListPost } from "../../queries/post";
+import ModalDetail from "./components/ModalDetail";
 
 const { Title } = Typography;
 
@@ -89,10 +88,12 @@ export default function Post() {
             }}
           />
         </Col>
-        {isLoadingListPost ? (
-          <Spin />
-        ) : (
-          <Col span={24}>
+        <Col span={24}>
+          {isLoadingListPost ? (
+            <div className="lazy-loading-app">
+              <Spin />
+            </div>
+          ) : (
             <Table
               className="table-custom"
               columns={columns}
@@ -103,42 +104,10 @@ export default function Post() {
                 position: ["bottomLeft"],
               }}
             />
-          </Col>
-        )}
+          )}
+        </Col>
       </Row>
-      <Modal
-        width={600}
-        onCancel={() => setDetailPost(null)}
-        onOk={() => setDetailPost(null)}
-        title={detailPost?.title?.toUpperCase() || "Detail"}
-        open={!!detailPost}
-      >
-        {detailPost && (
-          <Descriptions style={{ marginTop: 20 }} bordered layout="horizontal">
-            <Descriptions.Item
-              labelStyle={{ width: 100 }}
-              label="User ID"
-              span={3}
-            >
-              {detailPost.userId}
-            </Descriptions.Item>
-            <Descriptions.Item
-              labelStyle={{ width: 100 }}
-              label="Title"
-              span={3}
-            >
-              {detailPost.title}
-            </Descriptions.Item>
-            <Descriptions.Item
-              labelStyle={{ width: 100 }}
-              label="Body"
-              span={3}
-            >
-              {detailPost.body}
-            </Descriptions.Item>
-          </Descriptions>
-        )}
-      </Modal>
+      <ModalDetail detailPost={detailPost} setDetailPost={setDetailPost} />
     </React.Fragment>
   );
 }
