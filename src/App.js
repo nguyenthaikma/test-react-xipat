@@ -5,6 +5,7 @@ import RouteApp from "./route";
 
 function App() {
   const queryClient = new QueryClient();
+  console.log(1)
   return (
     <ConfigProvider
       theme={{
