@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: "Roboto", sans-serif;
 }
+
 * {
   margin: 0;
 }
@@ -12,9 +13,31 @@ body {
   height: 100vh;
   overflow: hidden;
 }
+
 .h-full {
   height: 100%;
 }
+
 .w-full {
   width: 100%;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.item1 {
+  order: 2;
+}
+
+.item2 {
+  order: 1;
+}
+
+.item3 {
+  order: 3;
+}
+
+.item2~.item3 {
+  display: none;
 }
