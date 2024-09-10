@@ -1,99 +1,103 @@
-import { Button, Col, Row, Typography } from "antd";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addTest, getNumber } from "../../redux/action/number";
+import React, { useReducer } from "react";
+import Table from "../../components/Table";
+import makeData from "../../components/Table/utils";
 
-const { Title } = Typography;
+function reducer(state, action) {
+  switch (action.type) {
+    case "add_row":
+      return {
+        ...state,
+        data: [...state.data, { ID: state.data[state.data.length - 1].ID + 1 }],
+      };
+    case "delete_row":
+      const deleteRowIndex = state.data.findIndex(
+        (item) => item.ID === action.rowId
+      );
+      const newDatas = [...state.data];
+      newDatas.splice(deleteRowIndex, 1);
+      return {
+        ...state,
+        data: newDatas,
+      };
+    case "update_column_header":
+      const index = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      return {
+        ...state,
+        columns: [
+          ...state.columns.slice(0, index),
+          {
+            ...state.columns[index],
+            label: action.label,
+            id: action.label.toLowerCase(),
+          },
+          ...state.columns.slice(index + 1, state.columns.length),
+        ],
+      };
+    case "update_cell":
+      return {
+        ...state,
+        data: state.data.map((row, index) => {
+          if (index === action.rowIndex) {
+            return {
+              ...state.data[action.rowIndex],
+              [action.columnId]: action.value,
+            };
+          }
+          return row;
+        }),
+      };
+    case "add_column_to_left":
+      const leftIndex = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      let leftId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+      return {
+        ...state,
+        columns: [
+          ...state.columns.slice(0, leftIndex),
+          {
+            id: leftId,
+            label: "Column",
+            accessor: leftId,
+            dataType: "text",
+            created: action.focus && true,
+          },
+          ...state.columns.slice(leftIndex, state.columns.length),
+        ],
+      };
+    case "delete_column":
+      const deleteIndex = state.columns.findIndex(
+        (column) => column.id === action.columnId
+      );
+      return {
+        ...state,
+        columns: [
+          ...state.columns.slice(0, deleteIndex),
+          ...state.columns.slice(deleteIndex + 1, state.columns.length),
+        ],
+      };
+    default:
+      return state;
+  }
+}
 
 export default function Dashboard() {
-  // const path = useLocation();
-  // const navigate = useNavigate();
-  // const typeChart = path.pathname.split("/").pop();
-
-  // // Fake data chart
-  // const seriesLineChart = useMemo(
-  //   () => [
-  //     {
-  //       name: "Data - 1",
-  //       data: [25, 29, 33, 30, 32, 32, 33],
-  //     },
-  //     {
-  //       name: "Data - 2",
-  //       data: [12, 11, 14, 18, 17, 13, 13],
-  //     },
-  //   ],
-  //   []
-  // );
-  // const seriesColumnChart = useMemo(
-  //   () => [
-  //     {
-  //       name: "Data - 1",
-  //       data: [28, 29, 33, 36, 32, 32, 33, 29, 34, 28, 26, 25],
-  //     },
-  //     {
-  //       name: "Data - 2",
-  //       data: [12, 11, 14, 18, 17, 13, 13, 15, 12, 16, 14, 15],
-  //     },
-  //   ],
-  //   []
-  // );
-
-  const test = useSelector((state) => state.testReducer.test);
-  let a = 1;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getNumber());
-  }, [dispatch]);
-
-  const handlePush = () => {
-    a++
-    dispatch(addTest({ maBanner: a }));
-    a = 0
-  };
-
+  const [state, dispatch] = useReducer(reducer, makeData());
   return (
-    <Row gutter={[0, 6]}>
-      <Col span={24}>
-        <Title level={5}>Dashboard</Title>
-      </Col>
-      <Col span={24}>
-        <Button onClick={handlePush}>Push</Button>
-      </Col>
-      <Row>
-        <Col span={24}>
-          {test.map((v, i) => (
-            <Button onClick={() => dispatch(addTest({ maBanner: i }))} key={i}>
-              {v.maBanner}
-            </Button>
-          ))}
-        </Col>
-      </Row>
-      {/* <Col span={24}>
-        <Space size={8}>
-          <Button
-            size="small"
-            type={typeChart === "subcription" ? "primary" : "default"}
-            onClick={() => navigate(ROUTE_PATH.DASHBOARD_SUBCRIPTION)}
-          >
-            Subcription
-          </Button>
-          <Button
-            size="small"
-            type={typeChart === "revenue" ? "primary" : "default"}
-            onClick={() => navigate(ROUTE_PATH.DASHBOARD_REVENUE)}
-          >
-            Revenue
-          </Button>
-        </Space>
-      </Col> */}
-      {/* <Col span={24}>
-        {typeChart === "subcription" ? (
-          <LineChart series={seriesLineChart} />
-        ) : (
-          <ColumnChart series={seriesColumnChart} />
-        )}
-      </Col> */}
-    </Row>
+    <div style={{ overflow: "auto", display: "flex" }}>
+      <div
+        style={{
+          flex: "1 1 auto",
+          padding: "1rem",
+          maxWidth: 1000,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        <Table columns={state.columns} data={state.data} dispatch={dispatch} />
+      </div>
+    </div>
   );
 }
